@@ -20,6 +20,9 @@ const actionsEl = document.querySelector("#actions");
 const sortBtn = document.querySelector("#sortBtn");
 const filterBtn = document.querySelector("#filterBtn");
 
+
+console.log("Hello")
+
 /* ---------- счётчик действий ---------- */
 
 function createCounter() {
