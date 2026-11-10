@@ -30,6 +30,12 @@ function createCounter() {
   };
 }
 
+const countActions = createCounter();
+
+function updateCounter() {
+  actionsEl.textContent = countActions();
+}
+
 /* ---------- отрисовка ---------- */
 
 function render() {
@@ -52,7 +58,10 @@ function render() {
     removeBtn.className = "item__remove";
     removeBtn.type = "button";
     removeBtn.textContent = "Удалить";
-    removeBtn.addEventListener("click", () => removeTask(item.dataset.id));
+    removeBtn.addEventListener("click", () => {
+      removeTask(item.dataset.id);
+      updateCounter();
+    });
 
     item.append(text, priority, removeBtn);
     listEl.append(item);
@@ -62,22 +71,24 @@ function render() {
 /* ---------- удаление ---------- */
 
 function removeTask(id) {
-  const task = tasks.find((t) => t.id === id);
-  tasks.splice(tasks.indexOf(task), 1);
-  render();
+  const task = tasks.find((t) => t.id === Number(id));
+  if (task) {
+    tasks.splice(tasks.indexOf(task), 1);
+    render();
+  }
 }
 
 /* ---------- сортировка по важности ---------- */
 
 sortBtn.addEventListener("click", function () {
-  tasks.sort();
+  tasks.sort((a, b) => b.priority - a.priority);
   render();
 });
 
 /* ---------- фильтр: только важные ---------- */
 
 filterBtn.addEventListener("click", function () {
-  tasks.filter((task) => task.priority >= 5);
+  tasks = tasks.filter((task) => task.priority >= 5);
   render();
 });
 
@@ -85,8 +96,7 @@ filterBtn.addEventListener("click", function () {
 
 document.querySelectorAll(".btn").forEach((btn) => {
   btn.addEventListener("click", function () {
-    const countActions = createCounter();
-    actionsEl.textContent = countActions();
+    updateCounter();
   });
 });
 
